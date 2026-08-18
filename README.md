@@ -1,16 +1,56 @@
-# React + Vite
+# 🏍️ Proymotos
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Plataforma web moderna para la exhibición, venta y reserva de motocicletas premium.
 
-Currently, two official plugins are available:
+## 🌟 Características Principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* **Catálogo Moderno**: Visualización en tarjetas interactivas con sistema de fallback inteligente para imágenes.
+* **Búsqueda Avanzada**: Búsqueda por texto y filtros dinámicos (Marca, Categoría, Precio, Disponibilidad).
+* **Sistema de Favoritos**: Guarda tus motos favoritas en tu perfil. (Sincronizado con base de datos).
+* **Reservas Seguras**: Proceso de reserva de motocicletas por fecha.
+* **Chat Inteligente (MotoBot)**: Asistente virtual basado en IA para responder dudas y ayudar en la selección.
+* **Responsive Design**: Experiencia perfecta en móviles, tablets y escritorio.
 
-## React Compiler
+## 🛠️ Tecnologías
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend (`Frontend/`)
+* **React 19**
+* **Vite 8**
+* **React Router v7**
+* **Axios** (para consumo de API REST)
+* **CSS Vanilla** (Custom properties, grid, flexbox, animaciones)
 
-## Expanding the Oxlint configuration
+### Backend (`Proymotos/`)
+* **Node.js** + **Express 5**
+* **TypeScript**
+* **Prisma ORM v7**
+* **PostgreSQL** (Hospedado en Render)
+* **JWT** (Autenticación)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## 🚀 Instalación y Uso Local
+
+Para correr este proyecto en tu entorno local necesitas tener Node.js instalado.
+
+### 1. Backend (API)
+```bash
+cd Proymotos
+npm install
+# Crear archivo .env basado en .env.example (necesita DATABASE_URL, JWT_SECRET, OPENAI_API_KEY)
+npx prisma db push
+npm run dev
+```
+
+### 2. Frontend (Cliente)
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+El frontend correrá típicamente en `http://localhost:5173`.
+
+## 🛡️ Seguridad
+
+> **Nota para desarrolladores:** Nunca subas archivos `.env` a repositorios públicos. Los archivos `.gitignore` han sido configurados para prevenirlo.
+
+## 📄 Licencia
+Este proyecto es un portafolio de desarrollo.

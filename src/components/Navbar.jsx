@@ -39,6 +39,7 @@ export default function Navbar() {
             <>
               <Link to="/dashboard" className="navbar__link">Mi Panel</Link>
               <Link to="/bookings" className="navbar__link">Reservas</Link>
+              <Link to="/favorites" className="navbar__link">❤️ Favoritos</Link>
               {isAdmin && <Link to="/admin" className="navbar__link navbar__link--admin">Admin</Link>}
               <div className="navbar__user">
                 <span className="navbar__avatar">{user.name?.charAt(0).toUpperCase()}</span>

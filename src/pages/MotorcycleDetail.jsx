@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMotorcycle } from '../api/motorcycles';
 import { useAuth } from '../context/AuthContext';
+import { useFavorites } from '../context/FavoritesContext';
 import BookingModal from '../components/BookingModal';
+import ContactModal from '../components/ContactModal';
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../components/ReviewForm';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -15,11 +17,16 @@ export default function MotorcycleDetail() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toasts, addToast, removeToast } = useToast();
+  
+  const favoritesCtx = useFavorites();
+  const isFavorite = favoritesCtx?.isFavorite || (() => false);
+  const toggleFavorite = favoritesCtx?.toggleFavorite || (async () => {});
 
   const [moto, setMoto] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showBooking, setShowBooking] = useState(false);
+  const [showContact, setShowContact] = useState(false);
 
   const fetch = async () => {
     setLoading(true);
@@ -73,8 +80,26 @@ export default function MotorcycleDetail() {
 
             {/* Right: Info */}
             <div className="detail-info-col">
-              <div className="detail-brand">{moto.brand}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="detail-brand">{moto.brand}</div>
+                <button 
+                  className={`btn btn--icon ${isFavorite(moto.id) ? 'btn--active' : ''}`}
+                  onClick={() => {
+                    if (!user) return alert("Inicia sesión para agregar a favoritos");
+                    toggleFavorite(moto.id);
+                  }}
+                  style={{ background: 'transparent', fontSize: '1.5rem', padding: '0.5rem', border: 'none' }}
+                >
+                  {isFavorite(moto.id) ? '❤️' : '🤍'}
+                </button>
+              </div>
               <h1 className="detail-model">{moto.model}</h1>
+              
+              {moto.category && (
+                <span className="moto-card__badge--category" style={{ display: 'inline-block', padding: '0.2rem 0.6rem', borderRadius: '4px', background: 'rgba(59,130,246,0.1)', color: 'var(--blue)', fontSize: '0.8rem', fontWeight: 'bold', marginBottom: '1rem', border: '1px solid rgba(59,130,246,0.2)' }}>
+                  {moto.category}
+                </span>
+              )}
 
               <div className="detail-meta">
                 <div className="detail-meta-item"><span>📅</span><strong>{moto.year}</strong></div>
@@ -94,19 +119,24 @@ export default function MotorcycleDetail() {
                   <span className="detail-price-amount">${moto.price}</span>
                   <span className="detail-price-unit">/día</span>
                 </div>
-                {moto.available ? (
-                  user ? (
-                    <button className="btn btn--primary btn--lg" onClick={() => setShowBooking(true)}>
-                      Reservar Ahora
-                    </button>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  {moto.available ? (
+                    user ? (
+                      <button className="btn btn--primary btn--lg" style={{ flex: 1 }} onClick={() => setShowBooking(true)}>
+                        Reservar Ahora
+                      </button>
+                    ) : (
+                      <button className="btn btn--primary btn--lg" style={{ flex: 1 }} onClick={() => navigate('/login')}>
+                        Iniciar sesión para reservar
+                      </button>
+                    )
                   ) : (
-                    <button className="btn btn--primary btn--lg" onClick={() => navigate('/login')}>
-                      Iniciar sesión para reservar
-                    </button>
-                  )
-                ) : (
-                  <button className="btn btn--disabled btn--lg" disabled>No disponible</button>
-                )}
+                    <button className="btn btn--disabled btn--lg" style={{ flex: 1 }} disabled>No disponible</button>
+                  )}
+                  <button className="btn btn--outline btn--lg" style={{ flex: 1 }} onClick={() => setShowContact(true)}>
+                    Contactar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -146,6 +176,10 @@ export default function MotorcycleDetail() {
             addToast('¡Reserva creada exitosamente! Revisa tu panel.');
           }}
         />
+      )}
+      
+      {showContact && (
+        <ContactModal moto={moto} onClose={() => setShowContact(false)} />
       )}
     </>
   );

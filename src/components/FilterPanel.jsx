@@ -1,8 +1,14 @@
 import { useState } from 'react';
 
-export default function FilterPanel({ onFilter }) {
+export default function FilterPanel({ onFilter, initialFilters = {} }) {
   const [filters, setFilters] = useState({
-    search: '', brand: '', year: '', minPrice: '', maxPrice: '', available: '',
+    search: initialFilters.search || '', 
+    brand: initialFilters.brand || '', 
+    category: initialFilters.category || '', 
+    year: initialFilters.year || '', 
+    minPrice: initialFilters.minPrice || '', 
+    maxPrice: initialFilters.maxPrice || '', 
+    available: initialFilters.available || '',
   });
 
   const handle = (e) => {
@@ -17,7 +23,7 @@ export default function FilterPanel({ onFilter }) {
   };
 
   const reset = () => {
-    setFilters({ search: '', brand: '', year: '', minPrice: '', maxPrice: '', available: '' });
+    setFilters({ search: '', brand: '', category: '', year: '', minPrice: '', maxPrice: '', available: '' });
     onFilter({});
   };
 
@@ -37,6 +43,17 @@ export default function FilterPanel({ onFilter }) {
       <div className="filter-panel__group">
         <label className="filter-panel__label">Marca</label>
         <input className="filter-panel__input" name="brand" value={filters.brand} onChange={handle} placeholder="Yamaha, Honda..." />
+      </div>
+
+      <div className="filter-panel__group">
+        <label className="filter-panel__label">Categoría</label>
+        <select className="filter-panel__select" name="category" value={filters.category} onChange={handle}>
+          <option value="">Todas</option>
+          <option value="Urbana">Urbana</option>
+          <option value="Sport">Sport</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Cruiser">Cruiser</option>
+        </select>
       </div>
 
       <div className="filter-panel__group">

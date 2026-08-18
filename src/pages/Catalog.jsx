@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getMotorcycles } from '../api/motorcycles';
 import MotorcycleCard from '../components/MotorcycleCard';
 import FilterPanel from '../components/FilterPanel';
@@ -8,7 +9,14 @@ export default function Catalog() {
   const [motorcycles, setMotorcycles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [filters, setFilters] = useState({});
+  const [searchParams] = useSearchParams();
+  const initialFilters = {
+    search: searchParams.get('search') || '',
+    category: searchParams.get('category') || '',
+    available: searchParams.get('available') || ''
+  };
+
+  const [filters, setFilters] = useState(initialFilters);
   const [showFilter, setShowFilter] = useState(false);
 
   const fetchMotos = useCallback(async (params = {}) => {
@@ -41,7 +49,7 @@ export default function Catalog() {
         </button>
 
         <aside className={`catalog-sidebar ${showFilter ? 'catalog-sidebar--open' : ''}`}>
-          <FilterPanel onFilter={handleFilter} />
+          <FilterPanel onFilter={handleFilter} initialFilters={initialFilters} />
         </aside>
 
         <section className="catalog-results">
